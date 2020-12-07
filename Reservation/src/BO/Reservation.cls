@@ -10,7 +10,7 @@ Parameter INVOCATION = "Queue";
 Method creerReservation(pRequest As msg.creerReservationDmde, Output pResponse As msg.creerReservationRpse) As %Status
 {
     set pResponse = ##class(msg.creerReservationRpse).%New()
-    
+
     set reservation = ##class(data.Reservation).%New()
     set reservation.dateDebut = pRequest.dateDebut
     set reservation.dateFin = pRequest.dateFin
@@ -28,6 +28,7 @@ Method checkReservationExist(pRequest As msg.checkReservationDmde, Output pRespo
     set pResponse = ##class(msg.checkReservationRpse).%New()
     set pResponse.plaque = "000-00-00"
     set pResponse.codeRetour = "KO"
+    set pResponse.libErreur = "Aucune voitures disponibles"
 
     set sql = "select plaque from data.Voiture where categorie ='"_pRequest.categorie_"' and plaque not in ("
     set sql = sql_" SELECT voiture->plaque FROM data.Reservation where voiture->categorie = '"_pRequest.categorie_"'"
@@ -44,8 +45,9 @@ Method checkReservationExist(pRequest As msg.checkReservationDmde, Output pRespo
     While SQLRequest.%Next(){
         set pResponse.plaque = SQLRequest.%Get("plaque")
         set pResponse.codeRetour = "OK"
+        set pResponse.libErreur = ""
     }
-
+    
     Quit $$$OK
 }
 
