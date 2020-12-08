@@ -13,7 +13,7 @@ Method creerVoiture(pRequest As msg.creerVoitureDmde, Output pResponse As msg.cr
 
     set httpRequest = ##class(%Net.HttpRequest).%New()
 
-    set request = ##class(msg.Reservation.creerVoitureDmde).%New()
+    set request = ##class(msg.creerVoitureDmde).%New()
 
     set request.nom = pRequest.voiture.marque_" "_pRequest.voiture.modele
     set request.categorie = pRequest.voiture.categorie
@@ -30,11 +30,28 @@ Method creerVoiture(pRequest As msg.creerVoitureDmde, Output pResponse As msg.cr
     Quit $$$OK
 }
 
+Method checkReservationExistParPlaque(pRequest As msg.checkReservationExistParPlaqueDmde, Output pResponse As msg.checkReservationExistParPlaqueRpse) As %Status
+{
+    set pResponse = ##class(msg.checkReservationExistParPlaqueRpse).%New()
+    set pResponse.codeRetour = "OK"
+
+    set httpRequest = ##class(%Net.HttpRequest).%New()
+    do ..ObjectToJSONStream(pRequest, .EntityBody)
+    set httpRequest.EntityBody = EntityBody
+    set tsc = ..Adapter.SendFormDataArray(.httpResponse, "POST", httpRequest)
+    do ..JSONStreamToObject(httpResponse.Data,.pResponse,"msg.checkReservationExistParPlaqueRpse",1)
+
+    Quit $$$OK
+}
+
 XData MessageMap
 {
 <MapItems>
     <MapItem MessageType="msg.creerVoitureDmde">
         <Method>creerVoiture</Method>
+    </MapItem>
+    <MapItem MessageType="msg.checkReservationExistParPlaqueDmde">
+        <Method>checkReservationExistParPlaque</Method>
     </MapItem>
 </MapItems>
 }

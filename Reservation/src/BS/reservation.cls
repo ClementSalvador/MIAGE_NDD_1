@@ -2,6 +2,11 @@
 Class BS.reservation Extends Ens.BusinessProcessBPL
 {
 
+Storage Default
+{
+<Type>%Storage.Persistent</Type>
+}
+
 /// BPL Definition
 XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 {
@@ -14,7 +19,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 </property>
 </context>
 <sequence xend='200' yend='700' >
-<call name='appel_checkreservation' target='Reservation' async='1' xpos='200' ypos='250' >
+<call name='appel_checkreservation' target='Reservation' async='0' xpos='200' ypos='250' >
 <request type='msg.checkReservationDmde' >
 <assign property="callrequest.categorie" value="request.categorie" action="set" />
 <assign property="callrequest.dateDebut" value="request.dateDebut" action="set" />
@@ -28,7 +33,7 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 </call>
 <if name='si_codeRetourEstOK' condition='response.codeRetour="OK"' xpos='200' ypos='350' xend='200' yend='600' >
 <true>
-<call name='call_creerReservation' target='Reservation' async='1' xpos='335' ypos='500' >
+<call name='call_creerReservation' target='Reservation' async='0' xpos='335' ypos='500' >
 <request type='msg.creerReservationDmde' >
 <assign property="callrequest.plaque" value="context.plaque" action="set" />
 <assign property="callrequest.dateDebut" value="request.dateDebut" action="set" />
@@ -40,11 +45,6 @@ XData BPL [ XMLNamespace = "http://www.intersystems.com/bpl" ]
 </if>
 </sequence>
 </process>
-}
-
-Storage Default
-{
-<Type>%Storage.Persistent</Type>
 }
 
 }

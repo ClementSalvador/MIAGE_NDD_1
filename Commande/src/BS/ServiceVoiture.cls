@@ -8,6 +8,7 @@ Method OnProcessInput(pInput As %RegisteredObject, Output pOutput As %Registered
 {
     set tsc = $CASE(pHint,
         "CommandeVoiture":..CommandeVoiture(pInput,.pOutput),
+        "sortieParcVoiture":..sortieParcVoiture(pInput,.pOutput),
 	 	: $$$ERROR($$$NotImplemented)
     )
     Quit tsc
@@ -16,6 +17,12 @@ Method OnProcessInput(pInput As %RegisteredObject, Output pOutput As %Registered
 Method CommandeVoiture(pInput As %RegisteredObject, Output pOutput As %RegisteredObject) As %Status
 {
     set tsc = ..SendRequestSync("processusCommande",pInput,.pOutput)
+    Quit $$$OK
+}
+
+Method sortieParcVoiture(pInput As %RegisteredObject, Output pOutput As %RegisteredObject) As %Status
+{
+    set tsc = ..SendRequestSync("sortieParc",pInput,.pOutput)
     Quit $$$OK
 }
 

@@ -1,4 +1,4 @@
-Class msg.supprimerVoitureDmde Extends (Ens.Request, %JSON.Adaptor)
+Class msg.supprimerVoitureDmde Extends Ens.Request
 {
 
 Property plaque As %String;

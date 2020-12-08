@@ -51,6 +51,33 @@ Method checkReservationExist(pRequest As msg.checkReservationDmde, Output pRespo
     Quit $$$OK
 }
 
+/**
+    Vérifie si il existe une réservation dans le future pour une voiture dont on passe la plaque
+    On return true si on a aucune réservation bloquante sinon false
+*/
+Method checkReservationParPlaque(pRequest As msg.checkReservationParPlaqueDmde, Output pResponse As msg.checkReservationParPlaqueRpse) As %Status
+{
+    set pResponse = ##class(msg.checkReservationRpse).%New()
+    set pResponse.codeRetour = "OK"
+    set pResponse.libErreur = "true"
+
+    PRINT pRequest
+
+    set sql = "SELECT voiture "
+    set sql = sql_"FROM data.Reservation "
+    set sql = sql_"WHERE voiture->plaque = '"_pRequest.plaque_"' AND dateFin >= NOW() "
+
+    set statement = ##class(%SQL.Statement).%New()
+    do statement.%Prepare(sql)
+    set SQLRequest = statement.%Execute()
+
+     While SQLRequest.%Next(){
+        set pResponse.libErreur = "false"
+     }
+
+    Quit $$$OK
+}
+
 XData MessageMap
 {
 <MapItems>
@@ -59,6 +86,9 @@ XData MessageMap
     </MapItem>
     <MapItem MessageType="msg.checkReservationDmde">
         <Method>checkReservationExist</Method>
+    </MapItem>
+    <MapItem MessageType="msg.checkReservationParPlaqueDmde">
+        <Method>checkReservationParPlaque</Method>
     </MapItem>
 </MapItems>
 }

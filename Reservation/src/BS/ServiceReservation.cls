@@ -8,6 +8,7 @@ Method OnProcessInput(pInput As %RegisteredObject, Output pOutput As %Registered
 {
     set tsc = $CASE(pHint,
         "creerReservation":..creerReservation(pInput,.pOutput),
+        "checkReservationParPlaque":..checkReservationParPlaque(pInput,.pOutput),
 	 	: $$$ERROR($$$NotImplemented)
     )
     Quit tsc
@@ -16,6 +17,12 @@ Method OnProcessInput(pInput As %RegisteredObject, Output pOutput As %Registered
 Method creerReservation(pInput As %RegisteredObject, Output pOutput As %RegisteredObject) As %Status
 {
     set tsc = ..SendRequestSync("reserv",pInput,.pOutput)
+    Quit $$$OK
+}
+
+Method checkReservationParPlaque(pInput As %RegisteredObject, Output pOutput As %RegisteredObject) As %Status
+{
+    set tsc = ..SendRequestSync("Reservation",pInput,.pOutput)
     Quit $$$OK
 }
 

@@ -28,7 +28,7 @@ Method supprimerVoiture(pRquest As msg.supprimerVoitureDmde, Output pResponse As
     set pResponse.codeRetour = "OK"
 
     Quit $$$OK
-} 
+}
 
 XData MessageMap
 {
